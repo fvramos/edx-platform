@@ -1,0 +1,24 @@
+<div class="modal-image-link">
+  <%= smallImage %>
+  <span class="modal-image-ui-icon fullscreen">
+    <i class="icon-fullscreen icon-large"></i> <%= gettext("Fullscreen") %>
+  </span>
+</div>
+<div class="modal-image">
+  <div class="modal-image-content">
+    <div class="modal-image-img-wrapper">
+      <%= largeImage %>
+    </div>
+    <span class="modal-image-ui-icon remove">
+      <i class="icon-remove icon-large"></i> <%= gettext("Close") %>
+    </span>
+    <div class="modal-image-ui-icons zoom">
+      <span class="modal-image-ui-icon zoom-in">
+        <i class="icon-zoom-in icon-large"></i> <%= gettext("Zoom In") %>
+      </span>
+      <span class="modal-image-ui-icon zoom-out disabled">
+        <i class="icon-zoom-out icon-large"></i> <%= gettext("Zoom Out") %>
+      </span>
+    </div>
+  </div>
+</div>

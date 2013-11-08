@@ -145,3 +145,133 @@ th {
   background: #eee;
   font-weight: bold;
 }
+
+
+// image modal
+// --------------------
+
+// modal - image zoom, fill window
+html.modal-open {
+  overflow: hidden;
+}
+
+.modal-image-ui-icon {
+  position: absolute;
+  display: block;
+  padding: 5px 7px;
+  cursor: pointer;
+  border-radius: 5px;
+  opacity: .9;
+  background: $body-bg;
+  color: $base-font-color;
+  font-weight: bold;
+  
+  i {
+    font-style: normal;
+  }
+}
+
+.modal-image-link {
+  display: block;                                                                             
+  position: relative;
+  cursor: pointer;
+  
+  .fullscreen {
+    display: none;
+    top: 10px;
+    left: 10px;
+  }
+  
+  &:hover .fullscreen {
+    display: block;
+  }
+}
+
+.modal-image {
+  display: none;
+  position: fixed;
+  cursor: pointer;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  .modal-image-content {
+    height: 95%;
+    width: 95%;
+    display: block;
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+    top: 2.5%;
+    
+    .modal-image-img-wrapper {
+      position: relative;
+      
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        position: relative;
+        margin: auto;
+        display: block;
+        cursor: default;
+      }
+    }
+    
+    .modal-image-ui-icon.remove {
+      top: 10px;
+      right: 10px;
+    }
+    
+    .modal-image-ui-icons.zoom {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      
+      .modal-image-ui-icon {
+        position: relative;
+        
+        &.zoom-in {
+          float: right;
+          margin-left: 5px;
+        }
+        &.zoom-out {
+          float: left;
+          margin-right: 5px;
+        }
+        &.disabled {
+          opacity: .5;
+          cursor: default;
+        }
+      }
+    }
+  }
+  
+  &.fit-to-screen {
+    display: block;
+    
+    .modal-image-content .modal-image-img-wrapper {
+      top: 0 !important;
+      left: 0 !important;
+      width: auto !important;
+      height: auto !important;
+      
+      img {
+        top: 0 !important;
+        left: 0 !important;
+      }
+    }
+  }
+  &.zoomed {
+    display: block;
+    
+    .modal-image-content .modal-image-img-wrapper img {
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      cursor: move;
+    }
+  }
+}
