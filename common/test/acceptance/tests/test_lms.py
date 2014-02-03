@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 E2E tests for the LMS.
 """
@@ -17,6 +18,7 @@ from ..pages.lms.course_info import CourseInfoPage
 from ..pages.lms.tab_nav import TabNavPage
 from ..pages.lms.course_nav import CourseNavPage
 from ..pages.lms.progress import ProgressPage
+from ..pages.lms.dashboard import DashboardPage
 from ..pages.lms.video import VideoPage
 from ..fixtures.course import CourseFixture, XBlockFixtureDesc, CourseUpdateDesc
 
@@ -65,6 +67,8 @@ class RegistrationTest(UniqueCourseTest):
         # Check that we're registered for the course
         course_names = dashboard.available_courses
         self.assertIn(self.course_info['display_name'], course_names)
+
+
 
 
 class HighLevelTabTest(UniqueCourseTest):
