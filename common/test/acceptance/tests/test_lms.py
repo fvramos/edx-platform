@@ -69,6 +69,26 @@ class RegistrationTest(UniqueCourseTest):
         self.assertIn(self.course_info['display_name'], course_names)
 
 
+class LanguageTest(UniqueCourseTest):
+    """
+    Tests that the change language functionality on the dashboard works
+    """
+
+    def setUp(self):
+        """
+        Initiailize dashboard page
+        """
+        super(LanguageTest, self).setUp()
+        self.dashboard_page = DashboardPage(self.browser)
+    
+    def test_change_lang(self):
+        self.dashboard_page.visit()
+        # Change language to Esperanto
+        self.dashboard_page.change_lang()
+        self.dashboard_page.visit()
+        body = self.browser.body
+        matches = re.match(u'^FÏND ÇØÜRSÉS.+$', body)
+        self.assertTrue(matches is not None)
 
 
 class HighLevelTabTest(UniqueCourseTest):
