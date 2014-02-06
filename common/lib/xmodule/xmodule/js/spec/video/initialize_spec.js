@@ -7,11 +7,11 @@ require(
 function (Initialize) {
     describe('Initialize', function () {
         describe('saveState function', function () {
-            var state, testData, currentTime1, currentTime2, speed;
+            var state, testData, videoPlayerСurrentTime, newCurrentTime, speed;
 
             // We make sure that `currentTime` is a float. We need to test
             // that Math.round() is called.
-            currentTime1 = 3.1242;
+            videoPlayerСurrentTime = 3.1242;
 
             // We have two times, because one is  stored in
             // `videoPlayer.currentTime`, and the other is passed directly to
@@ -19,7 +19,7 @@ function (Initialize) {
             // code that handles these times. They have to be different for
             // test completeness sake. Also, make sure it is float, as is the
             // time above.
-            currentTime2 = 5.4;
+            newCurrentTime = 5.4;
 
             speed = '0.75';
 
@@ -27,10 +27,10 @@ function (Initialize) {
                 itDescription: 'data is not an object, async is true',
                 asyncVal: true,
                 speedVal: undefined,
-                positionVal: currentTime1,
+                positionVal: videoPlayerСurrentTime,
                 data: undefined,
                 ajaxData: {
-                    position: Time.formatFull(Math.round(currentTime1))
+                    position: Time.formatFull(Math.round(videoPlayerСurrentTime))
                 }
             }, {
                 itDescription: 'data contains speed, async is false',
@@ -47,25 +47,25 @@ function (Initialize) {
                 itDescription: 'data contains float position, async is true',
                 asyncVal: true,
                 speedVal: undefined,
-                positionVal: currentTime2,
+                positionVal: newCurrentTime,
                 data: {
-                    position: currentTime2
+                    position: newCurrentTime
                 },
                 ajaxData: {
-                    position: Time.formatFull(Math.round(currentTime2))
+                    position: Time.formatFull(Math.round(newCurrentTime))
                 }
             }, {
                 itDescription: 'data contains speed and rounded position, async is false',
                 asyncVal: false,
                 speedVal: speed,
-                positionVal: Math.round(currentTime2),
+                positionVal: Math.round(newCurrentTime),
                 data: {
                     speed: speed,
-                    position: Math.round(currentTime2)
+                    position: Math.round(newCurrentTime)
                 },
                 ajaxData: {
                     speed: speed,
-                    position: Time.formatFull(Math.round(currentTime2))
+                    position: Time.formatFull(Math.round(newCurrentTime))
                 }
             }, {
                 itDescription: 'data contains empty object, async is true',
@@ -79,7 +79,7 @@ function (Initialize) {
             beforeEach(function () {
                 state = {
                     videoPlayer: {
-                        currentTime: currentTime1
+                        currentTime: videoPlayerСurrentTime
                     },
                     storage: {
                         setItem: jasmine.createSpy()
