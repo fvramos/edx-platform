@@ -117,11 +117,11 @@ function (Initialize) {
                     if (positionVal) {
                         expect(state.storage.setItem).toHaveBeenCalledWith(
                             'position',
-                            Math.round(positionVal),
+                            positionVal,
                             true
                         );
                         expect(Time.formatFull).toHaveBeenCalledWith(
-                            Math.round(positionVal)
+                            positionVal
                         );
                     }
                     expect($.ajax).toHaveBeenCalledWith({

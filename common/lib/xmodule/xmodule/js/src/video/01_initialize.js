@@ -685,7 +685,6 @@ function (VideoPlayer, VideoStorage) {
         }
 
         if (data.position) {
-            data.position = Math.round(data.position);
             this.storage.setItem('position', data.position, true);
 
             data.position = Time.formatFull(data.position);
