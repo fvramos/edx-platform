@@ -1,174 +1,129 @@
 (function (requirejs, require, define, undefined) {
 
+'use strict';
+
 require(
 ['video/01_initialize.js'],
 function (Initialize) {
     describe('Initialize', function () {
         describe('saveState function', function () {
-            var state;
+            var state, testData, currentTime1, currentTime2, speed;
+
+            // We make sure that `currentTime` is a float. We need to test
+            // that Math.round() is called.
+            currentTime1 = 3.1242;
+
+            // We have two times, because one is  stored in
+            // `videoPlayer.currentTime`, and the other is passed directly to
+            // `saveState` in `data` object. In each case, there is different
+            // code that handles these times. They have to be different for
+            // test completeness sake. Also, make sure it is float, as is the
+            // time above.
+            currentTime2 = 5.4;
+
+            speed = '0.75';
+
+            testData = [{
+                itDescription: 'data is not an object, async is true',
+                asyncVal: true,
+                speedVal: undefined,
+                positionVal: currentTime1,
+                data: undefined,
+                ajaxData: {
+                    position: Math.round(currentTime1)
+                }
+            }, {
+                itDescription: 'data contains speed, async is false',
+                asyncVal: false,
+                speedVal: speed,
+                positionVal: undefined,
+                data: {
+                    speed: speed
+                },
+                ajaxData: {
+                    speed: speed
+                }
+            }, {
+                itDescription: 'data contains float position, async is true',
+                asyncVal: true,
+                speedVal: undefined,
+                positionVal: currentTime2,
+                data: {
+                    position: currentTime2
+                },
+                ajaxData: {
+                    position: Math.round(currentTime2)
+                }
+            }, {
+                itDescription: 'data contains speed and rounded position, async is false',
+                asyncVal: false,
+                speedVal: speed,
+                positionVal: Math.round(currentTime2),
+                data: {
+                    speed: speed,
+                    position: Math.round(currentTime2)
+                },
+                ajaxData: {
+                    speed: speed,
+                    position: Math.round(currentTime2)
+                }
+            }, {
+                itDescription: 'data contains empty object, async is true',
+                asyncVal: true,
+                speedVal: undefined,
+                positionVal: undefined,
+                data: {},
+                ajaxData: {}
+            }];
 
             beforeEach(function () {
                 state = {
                     videoPlayer: {
-                        currentTime: 9.10101
+                        currentTime: currentTime1
                     },
                     storage: {
-                        setItem: function () {}
+                        setItem: jasmine.createSpy()
                     },
                     config: {
-                        saveStateUrl: 'sdfhasjfhjkfhfas'
+                        saveStateUrl: 'http://example.com/save_user_state'
                     }
                 };
 
                 spyOn($, 'ajax');
-                spyOn(state.storage, 'setItem');
             });
 
             afterEach(function () {
                 state = undefined;
             });
 
-            it('data is not an object, async is true', function () {
-                var asyncVal = true,
-                    positionVal = Math.round(state.videoPlayer.currentTime);
+            $.each(testData, function (index, value) {
+                it(value.itDescription, function () {
+                    var asyncVal    = value.asyncVal,
+                        speedVal    = value.speedVal,
+                        positionVal = value.positionVal,
+                        data        = value.data,
+                        ajaxData    = value.ajaxData;
 
-                Initialize.prototype.saveState.call(state, asyncVal);
+                    Initialize.prototype.saveState.call(state, asyncVal, data);
 
-                expect(state.storage.setItem).toHaveBeenCalledWith(
-                    'position',
-                    positionVal,
-                    true
-                );
-                expect($.ajax).toHaveBeenCalledWith({
-                    url: state.config.saveStateUrl,
-                    type: 'POST',
-                    async: asyncVal,
-                    dataType: 'json',
-                    data: {
-                        position: positionVal
-                    },
+                    speedVal && expect(state.storage.setItem).toHaveBeenCalledWith(
+                        'speed',
+                        speedVal,
+                        true
+                    );
+                    positionVal && expect(state.storage.setItem).toHaveBeenCalledWith(
+                        'position',
+                        Math.round(positionVal),
+                        true
+                    );
+                    expect($.ajax).toHaveBeenCalledWith({
+                        url: state.config.saveStateUrl,
+                        type: 'POST',
+                        async: asyncVal,
+                        dataType: 'json',
+                        data: ajaxData
+                    });
                 });
-
-                expect(state.storage.setItem.callCount).toBe(1);
-                expect($.ajax.callCount).toBe(1);
-            });
-
-            it('data contains speed, async is false', function () {
-                var asyncVal = false,
-                    speedVal = '0.75';
-
-                Initialize.prototype.saveState.call(
-                    state,
-                    asyncVal,
-                    {
-                        speed: speedVal
-                    }
-                );
-
-                expect(state.storage.setItem).toHaveBeenCalledWith(
-                    'speed',
-                    speedVal,
-                    true
-                );
-                expect($.ajax).toHaveBeenCalledWith({
-                    url: state.config.saveStateUrl,
-                    type: 'POST',
-                    async: asyncVal,
-                    dataType: 'json',
-                    data: {
-                        speed: speedVal
-                    },
-                });
-
-                expect(state.storage.setItem.callCount).toBe(1);
-                expect($.ajax.callCount).toBe(1);
-            });
-
-            it('data contains position, async is true', function () {
-                var asyncVal = true,
-                    positionVal = 3.1241;
-
-                Initialize.prototype.saveState.call(
-                    state,
-                    asyncVal,
-                    {
-                        position: positionVal
-                    }
-                );
-
-                expect(state.storage.setItem).toHaveBeenCalledWith(
-                    'position',
-                    positionVal,
-                    true
-                );
-                expect($.ajax).toHaveBeenCalledWith({
-                    url: state.config.saveStateUrl,
-                    type: 'POST',
-                    async: asyncVal,
-                    dataType: 'json',
-                    data: {
-                        position: positionVal
-                    },
-                });
-
-                expect(state.storage.setItem.callCount).toBe(1);
-                expect($.ajax.callCount).toBe(1);
-            });
-
-            it('data contains speed and position, async is false', function () {
-                var asyncVal = false,
-                    speedVal = '0.75',
-                    positionVal = 3.2345;
-
-                Initialize.prototype.saveState.call(
-                    state,
-                    asyncVal,
-                    {
-                        speed: speedVal,
-                        position: positionVal
-                    }
-                );
-
-                expect(state.storage.setItem).toHaveBeenCalledWith(
-                    'speed',
-                    speedVal,
-                    true
-                );
-                expect(state.storage.setItem).toHaveBeenCalledWith(
-                    'position',
-                    positionVal,
-                    true
-                );
-                expect($.ajax).toHaveBeenCalledWith({
-                    url: state.config.saveStateUrl,
-                    type: 'POST',
-                    async: asyncVal,
-                    dataType: 'json',
-                    data: {
-                        speed: speedVal,
-                        position: positionVal
-                    },
-                });
-
-                expect(state.storage.setItem.callCount).toBe(2);
-                expect($.ajax.callCount).toBe(1);
-            });
-
-            it('data contains empty object, async is true', function () {
-                var asyncVal = true;
-
-                Initialize.prototype.saveState.call(state, asyncVal, {});
-
-                expect($.ajax).toHaveBeenCalledWith({
-                    url: state.config.saveStateUrl,
-                    type: 'POST',
-                    async: asyncVal,
-                    dataType: 'json',
-                    data: {},
-                });
-
-                expect(state.storage.setItem.callCount).toBe(0);
-                expect($.ajax.callCount).toBe(1);
             });
         });
     });
