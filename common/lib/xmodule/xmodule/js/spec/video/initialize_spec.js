@@ -7,11 +7,11 @@ require(
 function (Initialize) {
     describe('Initialize', function () {
         describe('saveState function', function () {
-            var state, testData, videoPlayerСurrentTime, newCurrentTime, speed;
+            var state, testData, videoPlayerCurrentTime, newCurrentTime, speed;
 
             // We make sure that `currentTime` is a float. We need to test
             // that Math.round() is called.
-            videoPlayerСurrentTime = 3.1242;
+            videoPlayerCurrentTime = 3.1242;
 
             // We have two times, because one is  stored in
             // `videoPlayer.currentTime`, and the other is passed directly to
@@ -27,10 +27,10 @@ function (Initialize) {
                 itDescription: 'data is not an object, async is true',
                 asyncVal: true,
                 speedVal: undefined,
-                positionVal: videoPlayerСurrentTime,
+                positionVal: videoPlayerCurrentTime,
                 data: undefined,
                 ajaxData: {
-                    position: Time.formatFull(Math.round(videoPlayerСurrentTime))
+                    position: Time.formatFull(Math.round(videoPlayerCurrentTime))
                 }
             }, {
                 itDescription: 'data contains speed, async is false',
@@ -79,7 +79,7 @@ function (Initialize) {
             beforeEach(function () {
                 state = {
                     videoPlayer: {
-                        currentTime: videoPlayerСurrentTime
+                        currentTime: videoPlayerCurrentTime
                     },
                     storage: {
                         setItem: jasmine.createSpy()
