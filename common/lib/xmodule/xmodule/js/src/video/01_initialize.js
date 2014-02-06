@@ -26,7 +26,7 @@ function (VideoPlayer, VideoStorage) {
      *     available via this object.
      * @param {DOM element} element Container of the entire Video DOM element.
      */
-    return function (state, element) {
+    var Initialize = function (state, element) {
         _makeFunctionsPublic(state);
 
         state.initialize(element)
@@ -56,7 +56,25 @@ function (VideoPlayer, VideoStorage) {
                         state.el.trigger('initialize', arguments);
                     });
             });
+    },
+    methodsDict = {
+        bindTo: bindTo,
+        fetchMetadata: fetchMetadata,
+        getDuration: getDuration,
+        getVideoMetadata: getVideoMetadata,
+        initialize: initialize,
+        parseSpeed: parseSpeed,
+        parseVideoSources: parseVideoSources,
+        parseYoutubeStreams: parseYoutubeStreams,
+        saveState: saveState,
+        setSpeed: setSpeed,
+        trigger: trigger,
+        youtubeId: youtubeId
     };
+
+    Initialize.prototype = methodsDict;
+
+    return Initialize;
 
     // ***************************************************************
     // Private functions start here. Private functions start with underscore.
@@ -73,21 +91,6 @@ function (VideoPlayer, VideoStorage) {
      *     methods, modules) of the Video player.
      */
     function _makeFunctionsPublic(state) {
-        var methodsDict = {
-            bindTo: bindTo,
-            fetchMetadata: fetchMetadata,
-            getDuration: getDuration,
-            getVideoMetadata: getVideoMetadata,
-            initialize: initialize,
-            parseSpeed: parseSpeed,
-            parseVideoSources: parseVideoSources,
-            parseYoutubeStreams: parseYoutubeStreams,
-            saveState: saveState,
-            setSpeed: setSpeed,
-            trigger: trigger,
-            youtubeId: youtubeId
-        };
-
         bindTo(methodsDict, state, state);
     }
 
