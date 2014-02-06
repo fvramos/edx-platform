@@ -101,6 +101,8 @@ function (
             youtubeXhr = state.youtubeXhr;
         }
 
+        $(element).find('.video').data('video-player-state', state);
+
         // Because the 'state' object is only available inside this closure, we will also make
         // it available to the caller by returning it. This is necessary so that we can test
         // Video with Jasmine.

@@ -676,7 +676,7 @@ function (VideoPlayer, VideoStorage) {
     function saveState(async, data) {
         if (!($.isPlainObject(data))) {
             data = {
-                position: Math.round(this.videoPlayer.currentTime)
+                position: this.videoPlayer.currentTime
             };
         }
 
@@ -687,6 +687,8 @@ function (VideoPlayer, VideoStorage) {
         if (data.position) {
             data.position = Math.round(data.position);
             this.storage.setItem('position', data.position, true);
+
+            data.position = Time.formatFull(data.position);
         }
 
         $.ajax({
