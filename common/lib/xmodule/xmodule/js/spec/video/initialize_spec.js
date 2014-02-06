@@ -30,7 +30,7 @@ function (Initialize) {
                 positionVal: currentTime1,
                 data: undefined,
                 ajaxData: {
-                    position: Math.round(currentTime1)
+                    position: Time.formatFull(Math.round(currentTime1))
                 }
             }, {
                 itDescription: 'data contains speed, async is false',
@@ -52,7 +52,7 @@ function (Initialize) {
                     position: currentTime2
                 },
                 ajaxData: {
-                    position: Math.round(currentTime2)
+                    position: Time.formatFull(Math.round(currentTime2))
                 }
             }, {
                 itDescription: 'data contains speed and rounded position, async is false',
@@ -65,7 +65,7 @@ function (Initialize) {
                 },
                 ajaxData: {
                     speed: speed,
-                    position: Math.round(currentTime2)
+                    position: Time.formatFull(Math.round(currentTime2))
                 }
             }, {
                 itDescription: 'data contains empty object, async is true',
@@ -90,6 +90,7 @@ function (Initialize) {
                 };
 
                 spyOn($, 'ajax');
+                spyOn(Time, 'formatFull').andCallThrough();
             });
 
             afterEach(function () {
@@ -106,16 +107,23 @@ function (Initialize) {
 
                     Initialize.prototype.saveState.call(state, asyncVal, data);
 
-                    speedVal && expect(state.storage.setItem).toHaveBeenCalledWith(
-                        'speed',
-                        speedVal,
-                        true
-                    );
-                    positionVal && expect(state.storage.setItem).toHaveBeenCalledWith(
-                        'position',
-                        Math.round(positionVal),
-                        true
-                    );
+                    if (speedVal) {
+                        expect(state.storage.setItem).toHaveBeenCalledWith(
+                            'speed',
+                            speedVal,
+                            true
+                        );
+                    }
+                    if (positionVal) {
+                        expect(state.storage.setItem).toHaveBeenCalledWith(
+                            'position',
+                            Math.round(positionVal),
+                            true
+                        );
+                        expect(Time.formatFull).toHaveBeenCalledWith(
+                            Math.round(positionVal)
+                        );
+                    }
                     expect($.ajax).toHaveBeenCalledWith({
                         url: state.config.saveStateUrl,
                         type: 'POST',
